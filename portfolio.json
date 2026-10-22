@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "axiom-station-ryan-vo",
+  "owner": "A220man",
+  "email": "ryandtvo@gmail.com",
+  "domain": "AI/ML developer tools",
+  "summary": "Work in progress: axiom-station-ryan-vo",
+  "workflows": [
+    "Upload markdown curriculum document and receive structured contradiction report with severity levels",
+    "Interactively review detected contradictions in web dashboard with source context and filtering",
+    "Export findings as JSON for upstream PR creation and tracking"
+  ],
+  "auth": "oidc-keycloak-saml-broker",
+  "llm_providers": [
+    "openai-compatible",
+    "anthropic",
+    "gemini",
+    "ollama"
+  ],
+  "status": "work-in-progress"
+}

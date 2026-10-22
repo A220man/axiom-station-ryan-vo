@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "current_feature": "contradiction-detection-engine",
+  "features": [
+    {
+      "id": "contradiction-detection-engine",
+      "title": "Contradiction Detection Engine",
+      "status": "done",
+      "acceptance": [
+        "Parse markdown documents with structured lesson metadata",
+        "Detect self-contradictions between hook/body/table/exercise sections",
+        "Report factual inconsistencies with severity levels",
+        "Expose REST API for document analysis"
+      ],
+      "implementation": [
+        "backend/app/services/document_parser.py",
+        "backend/app/services/contradiction_engine.py",
+        "backend/app/api/documents.py",
+        "backend/app/api/contradictions.py",
+        "backend/app/models/schemas.py"
+      ],
+      "tests": [
+        "backend/tests/test_contradiction_detection.py",
+        "backend/tests/test_api.py"
+      ]
+    },
+    {
+      "id": "document-parser",
+      "title": "Markdown Document Parser",
+      "status": "done",
+      "acceptance": [
+        "Extract phase, lesson, section structure from markdown",
+        "Handle cross-reference links and tables",
+        "Output structured JSON for analysis"
+      ],
+      "implementation": [
+        "backend/app/services/document_parser.py"
+      ],
+      "tests": [
+        "backend/tests/test_contradiction_detection.py::TestDocumentParser"
+      ]
+    },
+    {
+      "id": "web-dashboard",
+      "title": "Web Dashboard for Contradiction Review",
+      "status": "done",
+      "acceptance": [
+        "Display detected contradictions with source context",
+        "Filter by phase, lesson, severity",
+        "Export findings as JSON/CSV"
+      ],
+      "implementation": [
+        "frontend/src/components/Analyzer.tsx",
+        "frontend/src/components/ContradictionTable.tsx",
+        "frontend/src/components/FilterBar.tsx",
+        "frontend/src/hooks/useAnalysis.ts",
+        "frontend/src/api/client.ts"
+      ],
+      "tests": [
+        "frontend/src/components/Analyzer.test.tsx (removed, to be added)"
+      ]
+    }
+  ]
+}
