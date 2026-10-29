@@ -57,7 +57,7 @@
         "frontend/src/api/client.ts"
       ],
       "tests": [
-        "frontend/src/components/Analyzer.test.tsx (removed, to be added)"
+        "frontend/src/components/Analyzer.test.tsx"
       ]
     }
   ]

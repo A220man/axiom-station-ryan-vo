@@ -1,4 +1,4 @@
-# Axiom Station - AI Engineering Documentation Contradiction Detector
+# Axiom Station - AI Engineering Documentation Contradiction Detector — Ryan Vo
 
 > Work in progress. This checkpoint may be incomplete or fail tests. See PLAN.md and STATUS.md before use.
 
@@ -24,12 +24,12 @@ graph TD
 ## Current Status
 
 - [x] Project skeleton initialized
-- [ ] Document parser for structured markdown
-- [ ] Claim extraction from hooks/tables/bodies/exercises
-- [ ] Contradiction detection engine
-- [ ] FastAPI backend with tests
-- [ ] React + TypeScript frontend
-- [ ] Docker + CI/CD
+- [x] Document parser for structured markdown
+- [x] Claim extraction from hooks/tables/bodies/exercises
+- [x] Contradiction detection engine
+- [x] FastAPI backend with tests
+- [x] React + TypeScript frontend
+- [x] Docker + CI/CD
 - [ ] Keycloak OIDC authentication
 
 ## Workflows

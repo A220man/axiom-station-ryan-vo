@@ -1,10 +1,37 @@
 # Changelog
 
+## 1.1.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.0.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
 
 All notable changes to Axiom Station will be documented in this file.
+
+## [1.0.1] - 2026-10-29
+
+### Fixed
+- Fixed duplicate claim extraction in document parser: lines matching multiple claim-extraction conditions (factual pattern, number+keyword, frequency keyword) were generating duplicate claims, leading to duplicate contradiction reports. Each line now produces at most one claim.
+
+### Added
+- Frontend test suite (`frontend/src/components/Analyzer.test.tsx`) with 4 tests:
+  - Form rendering verification
+  - Default sample content check
+  - Analyze submission mock testing
+  - Error handling display
+- Vitest configuration with jsdom environment and @testing-library/jest-dom matchers
+- Test setup file for shared test configuration
+
+### Updated
+- README.md status checkboxes to reflect actual implementation state (all features except Keycloak OIDC complete)
+- Frontend TypeScript config to exclude test files from build and include vitest globals
+- STATUS.md with current test results and outstanding items
+
+### Test Results
+- Backend: 12 passed
+- Frontend: 4 passed
 
 ## [1.0.0] - 2026-10-22
 

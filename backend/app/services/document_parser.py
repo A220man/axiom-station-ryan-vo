@@ -104,11 +104,18 @@ class DocumentParser:
         claims = []
         content = section["content"]
         lines = content.split("\n")
+        claimed_lines = set()
 
         for i, line in enumerate(lines):
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
+
+            # Skip if this line already generated a claim
+            if i in claimed_lines:
+                continue
+
+            claim_added = False
 
             if self._is_factual_claim(line):
                 claims.append(Claim(
@@ -119,9 +126,11 @@ class DocumentParser:
                     line_end=section["line_start"] + i,
                     metadata={"section_title": section["title"]},
                 ))
+                claimed_lines.add(i)
+                claim_added = True
 
             # Also extract claims from sentences containing number words with domain keywords
-            if re.search(r"\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b", line.lower()):
+            if not claim_added and re.search(r"\b(one|two|three|four|five|six|seven|eight|nine|ten|\d+)\b", line.lower()):
                 if any(kw in line.lower() for kw in ["task", "action", "item", "step", "pattern", "example", "model", "layer", "parameter", "audit", "frequency", "quarter", "annual", "per"]):
                     claims.append(Claim(
                         id=f"{section_type.value}-{base_id + len(claims)}",
@@ -131,9 +140,11 @@ class DocumentParser:
                         line_end=section["line_start"] + i,
                         metadata={"section_title": section["title"]},
                     ))
+                    claimed_lines.add(i)
+                    claim_added = True
 
             # Also extract claims with frequency/time keywords even without explicit numbers
-            if any(kw in line.lower() for kw in ["quarter", "annual", "per quarter", "per year", "monthly", "weekly"]):
+            if not claim_added and any(kw in line.lower() for kw in ["quarter", "annual", "per quarter", "per year", "monthly", "weekly"]):
                 claims.append(Claim(
                     id=f"{section_type.value}-{base_id + len(claims)}",
                     section_type=section_type,
@@ -142,6 +153,8 @@ class DocumentParser:
                     line_end=section["line_start"] + i,
                     metadata={"section_title": section["title"]},
                 ))
+                claimed_lines.add(i)
+                claim_added = True
 
         table_claims = self._extract_table_claims(section, section_type, base_id + len(claims))
         claims.extend(table_claims)
