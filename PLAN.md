@@ -46,5 +46,5 @@ Acceptance:
 
 Implementation: `frontend/src/components/Analyzer.tsx`, `frontend/src/components/ContradictionTable.tsx`, `frontend/src/components/FilterBar.tsx`, `frontend/src/hooks/useAnalysis.ts`, `frontend/src/api/client.ts`
 
-Tests: `frontend/src/components/Analyzer.test.tsx (removed, to be added)`
+Tests: `frontend/src/components/Analyzer.test.tsx`
 
