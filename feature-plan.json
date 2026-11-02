@@ -1,64 +1,16 @@
 {
   "schema_version": 1,
-  "current_feature": "contradiction-detection-engine",
+  "current_feature": "continue-implementation",
   "features": [
     {
-      "id": "contradiction-detection-engine",
-      "title": "Contradiction Detection Engine",
-      "status": "done",
+      "id": "continue-implementation",
+      "title": "Continue implementation and resolve known failures",
+      "status": "in_progress",
       "acceptance": [
-        "Parse markdown documents with structured lesson metadata",
-        "Detect self-contradictions between hook/body/table/exercise sections",
-        "Report factual inconsistencies with severity levels",
-        "Expose REST API for document analysis"
+        "Run checks, fix failures, and implement the next planned feature"
       ],
-      "implementation": [
-        "backend/app/services/document_parser.py",
-        "backend/app/services/contradiction_engine.py",
-        "backend/app/api/documents.py",
-        "backend/app/api/contradictions.py",
-        "backend/app/models/schemas.py"
-      ],
-      "tests": [
-        "backend/tests/test_contradiction_detection.py",
-        "backend/tests/test_api.py"
-      ]
-    },
-    {
-      "id": "document-parser",
-      "title": "Markdown Document Parser",
-      "status": "done",
-      "acceptance": [
-        "Extract phase, lesson, section structure from markdown",
-        "Handle cross-reference links and tables",
-        "Output structured JSON for analysis"
-      ],
-      "implementation": [
-        "backend/app/services/document_parser.py"
-      ],
-      "tests": [
-        "backend/tests/test_contradiction_detection.py::TestDocumentParser"
-      ]
-    },
-    {
-      "id": "web-dashboard",
-      "title": "Web Dashboard for Contradiction Review",
-      "status": "done",
-      "acceptance": [
-        "Display detected contradictions with source context",
-        "Filter by phase, lesson, severity",
-        "Export findings as JSON/CSV"
-      ],
-      "implementation": [
-        "frontend/src/components/Analyzer.tsx",
-        "frontend/src/components/ContradictionTable.tsx",
-        "frontend/src/components/FilterBar.tsx",
-        "frontend/src/hooks/useAnalysis.ts",
-        "frontend/src/api/client.ts"
-      ],
-      "tests": [
-        "frontend/src/components/Analyzer.test.tsx"
-      ]
+      "implementation": [],
+      "tests": []
     }
   ]
 }

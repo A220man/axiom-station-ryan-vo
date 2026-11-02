@@ -133,6 +133,21 @@ The model has 100M parameters.
         contradictions = analyze_document(document)
         numeric_contradictions = [c for c in contradictions if "numeric" in c.description.lower()]
         assert len(numeric_contradictions) == 0, "Different units should not trigger false positive"
+    def test_ratio_contradiction(self):
+        content = """# Test
+
+## Hook
+The video uses 9:16 aspect ratio.
+
+## Problem
+The problem shows 1:3 aspect ratio.
+"""
+        document = parse_document(content, "phase-12", "test-ratio")
+        contradictions = analyze_document(document)
+        # Should detect ratio contradiction
+        ratio_contradictions = [c for c in contradictions if "ratio" in c.description.lower() or "aspect" in c.description.lower()]
+        assert len(ratio_contradictions) >= 1, "Should detect 9:16 vs 1:3 aspect ratio contradiction"
+
 
 
 class TestIntegration:

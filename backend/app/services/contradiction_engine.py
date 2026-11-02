@@ -10,6 +10,48 @@ class ContradictionEngine:
         self.numeric_pattern = re.compile(r"(\d+(?:\.\d+)?)\s*(billion|million|thousand|k|m|b|gpu|hours?|years?|params?|tokens?|entries|pairs|context|ms|mb|gb|kb)")
         self.comparison_pattern = re.compile(r"(vs|versus|compared to|conflicts with|contradicts|sum to|total|maximum|minimum|exceeds|fills|reaches)")
         self.quantity_pattern = re.compile(r"(\d+(?:,\d{3})*(?:\.\d+)?)\s*(billion|million|thousand|k|m|b|gpu|hours?|years?|params?|tokens?|entries|pairs|context|ms|mb|gb|kb)")
+        self.ratio_pattern = re.compile(r"(\d+(?:\.\d+)?)\s*:\s*(\d+(?:\.\d+)?)")
+
+    def _extract_ratios(self, text: str) -> List[Dict]:
+        """Extract ratio expressions like 9:16, 1:3, 16:9, etc."""
+        ratios = []
+        for match in self.ratio_pattern.finditer(text):
+            try:
+                num = float(match.group(1))
+                den = float(match.group(2))
+                if den != 0:
+                    ratios.append({
+                        "numerator": num,
+                        "denominator": den,
+                        "value": num / den,
+                        "original": match.group(0),
+                    })
+            except ValueError:
+                pass
+        return ratios
+
+    def _ratios_conflict(self, ratio_a: Dict, ratio_b: Dict, text_a: str, text_b: str) -> bool:
+        """Check if two ratios represent contradictory values.
+
+        Ratios conflict if they are significantly different and appear in related contexts
+        (e.g., both mention "aspect ratio", "ratio", or similar keywords).
+        """
+        # Check if ratios are in related contexts
+        ratio_keywords = ["ratio", "aspect", "proportion"]
+        related_context = any(kw in text_a and kw in text_b for kw in ratio_keywords)
+
+        if not related_context:
+            return False
+
+        # Check if ratios are significantly different (more than 10% relative difference)
+        val_a = ratio_a["value"]
+        val_b = ratio_b["value"]
+
+        if val_a == 0 or val_b == 0:
+            return False
+
+        rel_diff = abs(val_a - val_b) / max(abs(val_a), abs(val_b))
+        return rel_diff > 0.1
 
     def analyze(self, document: DocumentParseResult) -> List[Contradiction]:
         contradictions = []
@@ -62,6 +104,9 @@ class ContradictionEngine:
         nums_a = self._extract_quantities(text_a)
         nums_b = self._extract_quantities(text_b)
 
+        ratios_a = self._extract_ratios(text_a)
+        ratios_b = self._extract_ratios(text_b)
+
         for qty_a in nums_a:
             for qty_b in nums_b:
                 if self._quantities_conflict(qty_a, qty_b, text_a, text_b):
@@ -74,6 +119,21 @@ class ContradictionEngine:
                         severity=Severity.ERROR,
                         description=f"Numeric contradiction: '{qty_a['original']}' vs '{qty_b['original']}'",
                         suggestion=f"Verify which value is correct: {qty_a['original']} ({claim_a.section_type.value}) or {qty_b['original']} ({claim_b.section_type.value})",
+                    )
+
+        # Check for ratio contradictions (e.g., aspect ratios 9:16 vs 1:3)
+        for ratio_a in ratios_a:
+            for ratio_b in ratios_b:
+                if self._ratios_conflict(ratio_a, ratio_b, text_a, text_b):
+                    return Contradiction(
+                        id=f"contr-{document.lesson_id}-{claim_a.id}-{claim_b.id}",
+                        lesson_id=document.lesson_id,
+                        phase=document.phase,
+                        claim_a=claim_a,
+                        claim_b=claim_b,
+                        severity=Severity.ERROR,
+                        description=f"Ratio contradiction: '{ratio_a['original']}' vs '{ratio_b['original']}'",
+                        suggestion=f"Verify which ratio is correct: {ratio_a['original']} ({claim_a.section_type.value}) or {ratio_b['original']} ({claim_b.section_type.value})",
                     )
 
         if self._semantic_conflict(text_a, text_b):
