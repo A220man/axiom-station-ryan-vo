@@ -5,12 +5,16 @@
     {
       "id": "continue-implementation",
       "title": "Continue implementation and resolve known failures",
-      "status": "in_progress",
+      "status": "done",
       "acceptance": [
         "Run checks, fix failures, and implement the next planned feature"
       ],
-      "implementation": [],
-      "tests": []
+      "implementation": [
+        "backend/app/services/document_parser.py"
+      ],
+      "tests": [
+        "backend/tests/test_contradiction_detection.py::TestContradictionEngine::test_ratio_contradiction"
+      ]
     }
   ]
 }

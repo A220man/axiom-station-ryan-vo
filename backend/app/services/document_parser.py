@@ -169,6 +169,7 @@ class DocumentParser:
             r"(is|are|was|were|has|have|claims?|states?|reports?|specifies?)\s+",
             r"(vs|versus|compared to|conflicts with|contradicts)",
             r"(sum to|total|maximum|minimum|exceeds|fills|reaches)",
+            r"\d+\s*:\s*\d+",  # Match ratios like 9:16, 1:3, 16:9
         ]
         return any(re.search(p, line_lower) for p in factual_patterns)
 
