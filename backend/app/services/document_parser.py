@@ -110,6 +110,9 @@ class DocumentParser:
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
+            # Skip table rows - they are handled by _extract_table_claims
+            if line.startswith("|"):
+                continue
 
             # Skip if this line already generated a claim
             if i in claimed_lines:
