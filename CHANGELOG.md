@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
 ## 1.3.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.
@@ -17,6 +21,15 @@ Partial code published for continued development. Known issues: STATUS.md.
 Partial code published for continued development. Known issues: STATUS.md.
 
 All notable changes to Axiom Station will be documented in this file.
+
+## [1.3.1] - 2026-11-08
+
+### Fixed
+- Fixed duplicate claim extraction in document parser: table rows starting with `|` were being processed both by line-by-line claim extraction and by `_extract_table_claims`, causing duplicate claims and duplicate contradiction reports. Table rows are now skipped in line-by-line processing since `_extract_table_claims` handles them.
+
+### Test Results
+- Backend: 13 passed
+- Frontend: 4 passed
 
 ## [1.0.1] - 2026-10-29
 
