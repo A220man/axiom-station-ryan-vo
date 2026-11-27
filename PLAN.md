@@ -4,7 +4,7 @@ Each round completes one feature or repair. Future items are planned, not implem
 
 ## Current round
 
-duplicate-table-claims-fix
+table-row-claims-fix
 
 ## Roadmap
 
@@ -22,4 +22,19 @@ Acceptance:
 Implementation: `backend/app/services/document_parser.py`
 
 Tests: `backend/tests/test_contradiction_detection.py::TestDocumentParser::test_extract_table_claims`
+
+### table-row-claims-fix — Extract per-row table claims so table cell values feed contradiction detection
+
+Status: done
+
+Acceptance:
+- Each table data row produces exactly one claim with 'Table row:' text
+- Table claim metadata includes table_header and row_data
+- Numeric values inside table cells (e.g. 1.3B vs 4.4B) are detected as contradictions
+- No duplicate claims across document content
+- All existing backend tests pass
+
+Implementation: `backend/app/services/document_parser.py`
+
+Tests: `backend/tests/test_table_claims_enhanced.py::TestEnhancedTableClaims::test_table_claims_exact_count_and_no_duplicates`
 

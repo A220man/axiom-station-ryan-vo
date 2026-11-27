@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "current_feature": "duplicate-table-claims-fix",
+  "current_feature": "table-row-claims-fix",
   "features": [
     {
       "id": "duplicate-table-claims-fix",
@@ -18,6 +18,24 @@
       ],
       "tests": [
         "backend/tests/test_contradiction_detection.py::TestDocumentParser::test_extract_table_claims"
+      ]
+    },
+    {
+      "id": "table-row-claims-fix",
+      "title": "Extract per-row table claims so table cell values feed contradiction detection",
+      "status": "done",
+      "acceptance": [
+        "Each table data row produces exactly one claim with 'Table row:' text",
+        "Table claim metadata includes table_header and row_data",
+        "Numeric values inside table cells (e.g. 1.3B vs 4.4B) are detected as contradictions",
+        "No duplicate claims across document content",
+        "All existing backend tests pass"
+      ],
+      "implementation": [
+        "backend/app/services/document_parser.py"
+      ],
+      "tests": [
+        "backend/tests/test_table_claims_enhanced.py::TestEnhancedTableClaims::test_table_claims_exact_count_and_no_duplicates"
       ]
     }
   ]
