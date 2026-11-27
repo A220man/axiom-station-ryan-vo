@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.0 — work-in-progress checkpoint
+
+Partial code published for continued development. Known issues: STATUS.md.
+
+## 1.7.0 — work-in-progress checkpoint
+
+### Fixed
+- `_extract_table_claims` now emits one claim per table data row (with `table_header` and `row_data` metadata) instead of a single header-only claim. Table cell values (e.g. `1.3B` vs `4.4B`) are now extracted and surface as numeric contradictions. Fixes `test_table_claims_enhanced.py`.
+
+### Test Results
+- Backend: 14 passed
+
 ## 1.7.0 — work-in-progress checkpoint
 
 Partial code published for continued development. Known issues: STATUS.md.

@@ -189,24 +189,25 @@ class DocumentParser:
             stripped = line.strip()
             if not stripped.startswith("|"):
                 continue
-            # Only parse the header row (first non-separator | line)
+            # Skip separator rows (e.g., "|-----|--------|")
+            if re.match(r"^\|?\s*-+\s*\|", stripped):
+                continue
+            cells = [c.strip() for c in stripped.split("|") if c.strip()]
             if header is None:
-                # Skip separator rows (e.g., "|-----|--------|")
-                if re.match(r"^\|?\s*-+\s*\|", stripped):
-                    continue
-                header = [c.strip() for c in stripped.split("|") if c.strip()]
-                # Extract a single structural claim from the table header
-                if header:
-                    claims.append(Claim(
-                        id=f"{section_type.value}-table-{base_id}",
-                        section_type=SectionType.TABLE,
-                        text=f"Table with columns: {', '.join(header)}",
-                        line_start=section["line_start"] + i,
-                        line_end=section["line_start"] + i,
-                        metadata={"table_header": header},
-                    ))
-                # After processing header, skip remaining table rows to avoid duplicates
-                # (main claim extraction already skips |-prefixed lines)
+                # First non-separator row is the header; use it as column keys.
+                header = cells
+                continue
+            # Each subsequent row is a data row -> one claim carrying its cells.
+            if len(cells) == len(header):
+                row_data = dict(zip(header, cells))
+                claims.append(Claim(
+                    id=f"{section_type.value}-table-{base_id + len(claims)}",
+                    section_type=SectionType.TABLE,
+                    text=f"Table row: {row_data}",
+                    line_start=section["line_start"] + i,
+                    line_end=section["line_start"] + i,
+                    metadata={"table_header": header, "row_data": row_data},
+                ))
 
         return claims
 
